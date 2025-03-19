@@ -7,6 +7,8 @@ const OpenFileBar = () => {
   const { openedFiles, clickedFile } = useSelector(
     (state: RootState) => state.fileTree
   );
+  console.log(clickedFile);
+  
   /*  // Detect file type for syntax highlighting
    const getFileLanguage = (fileName: string) => {
      if (fileName.endsWith(".tsx") || fileName.endsWith(".ts")) return "typescript";
