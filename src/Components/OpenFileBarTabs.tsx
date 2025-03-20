@@ -11,7 +11,6 @@ interface IProps {
 
 const OpenFileBarTabs = ({ file }: IProps) => {
   const dispatch = useDispatch();
-
   const { clickedFile, openedFiles } = useSelector(
     (state: RootState) => state.fileTree
   );

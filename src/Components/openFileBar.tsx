@@ -1,34 +1,37 @@
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../app/store";
 import OpenFileBarTabs from "./OpenFileBarTabs";
-import FileSyntaxHighlighter from "./content-syntax-highlighter";
+import ContextMenu from "../ui/ContextMenu";
 
-const OpenFileBar = () => {
-  const { openedFiles, clickedFile } = useSelector(
-    (state: RootState) => state.fileTree
-  );
-  console.log(clickedFile);
-  
-  /*  // Detect file type for syntax highlighting
-   const getFileLanguage = (fileName: string) => {
-     if (fileName.endsWith(".tsx") || fileName.endsWith(".ts")) return "typescript";
-     if (fileName.endsWith(".js")) return "javascript";
-     if (fileName.endsWith(".css")) return "css";
-     if (fileName.endsWith(".html")) return "html";
-     if (fileName.endsWith(".json")) return "json";
-     return "plaintext"; // Default
-   }; */
+const OpenedFilesBar = () => {
+  const { openedFiles } = useSelector((state: RootState) => state.fileTree);
+  const [showMenu, setShowMenu] = useState(false);
+  const [menuPosition, setMenuPosition] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
+
   return (
-    <div>
-      <div className="flex">
+    <div className="w-full">
+      <div
+        className="flex items-center border-b-[1px] border-[#ffffff1f]"
+        onContextMenu={(e) => {
+          e.preventDefault();
+          setMenuPosition({ x: e.clientX, y: e.clientY });
+          setShowMenu(true);
+        }}
+      >
         {openedFiles.map((file) => (
           <OpenFileBarTabs key={file.id} file={file} />
         ))}
       </div>
 
-      <FileSyntaxHighlighter content={clickedFile.fileContent} />
+      {showMenu && (
+        <ContextMenu positions={menuPosition} setShowMenu={setShowMenu} />
+      )}
     </div>
   );
 };
 
-export default OpenFileBar;
+export default OpenedFilesBar;
